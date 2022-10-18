@@ -27,10 +27,7 @@ public class SnakeAndLadder {
 
     //this method will generate random number from 1-6
     public int rollDice() {
-        int n = 0;
-        Random r = new Random();
-        n = r.nextInt(7);
-        return (n == 0 ? 1 : n);
+        return (int)Math.floor(Math.random()*6 + 1);
     }
 
     /*calculatePlayerValue() method will calculate
@@ -75,6 +72,7 @@ public class SnakeAndLadder {
 
             if (currentPlayer==-1) {
                 player1Position=calculatePlayerValue(player1Position, diceValue);
+                System.out.println("Player 1 can move " + diceValue + " positions ahead.");
                 System.out.println("First Player Position:"+player1Position);
                 System.out.println("Second Player Position:"+player2Position);
                 System.out.println("-------------------------");
@@ -84,6 +82,7 @@ public class SnakeAndLadder {
                 }
             } else {
                 player2Position = calculatePlayerValue(player2Position, diceValue);
+                System.out.println("Player 2 can move " + diceValue + " positions ahead.");
                 System.out.println("First Player Position:"+player1Position);
                 System.out.println("Second Player Position:"+player2Position);
                 System.out.println("-------------------------");
