@@ -28,8 +28,8 @@ public class SnakeAndLadder {
 
     //dice roll: on rolling dice you will get any number in between 1 to 6 included
     public int rollDice() {
- //       return (int)Math.floor(Math.random()*6 + 1);
-      return 6;
+      return (int)Math.floor(Math.random()*6 + 1);
+//      return 6;
     }
 
     /*calculatePlayerPosition will calculate the new position of
