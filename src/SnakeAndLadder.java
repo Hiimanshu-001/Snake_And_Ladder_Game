@@ -1,6 +1,5 @@
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 import java.util.Scanner;
 public class SnakeAndLadder {
 
@@ -8,33 +7,35 @@ public class SnakeAndLadder {
     static Map<Integer, Integer> snake = new HashMap<>();
     static Map<Integer, Integer> ladder = new HashMap<>();
 
-    public static int test = 1;
-
-
     {
-        snake.put(99, 54);
-        snake.put(70, 55);
-        snake.put(52, 42);
-        snake.put(25, 2);
-        snake.put(95, 72);
+        snake.put(99, 41);
+        snake.put(89, 53);
+        snake.put(76, 58);
+        snake.put(66, 45);
+        snake.put(54, 31);
+        snake.put(43, 18);
+        snake.put(40, 3);
+        snake.put(27, 5);
 
-        ladder.put(6, 25);
-        ladder.put(11, 40);
-        ladder.put(60, 85);
-        ladder.put(46, 90);
-        ladder.put(17, 69);
+
+        ladder.put(4, 25);
+        ladder.put(13, 46);
+        ladder.put(33, 49);
+        ladder.put(50, 69);
+        ladder.put(62, 81);
+        ladder.put(74, 92);
     }
 
-    //this method will generate random number from 1-6
+    //dice roll: on rolling dice you will get any number in between 1 to 6 included
     public int rollDice() {
-        return (int)Math.floor(Math.random()*6 + 1);
+ //       return (int)Math.floor(Math.random()*6 + 1);
+      return 6;
     }
 
-    /*calculatePlayerValue() method will calculate
-     * the position of the player based on his current
-     * position after rolling the dice.
+    /*calculatePlayerPosition will calculate the new position of
+    *the player after it has moved certain distance
      */
-    public int calculatePlayerValue(int playerPosition, int diceValue) {
+    public int calculatePlayerPosition(int playerPosition, int diceValue) {
         int playerNewPosition=playerPosition+diceValue;
 
         if (playerNewPosition > WINPOINT)
@@ -42,11 +43,12 @@ public class SnakeAndLadder {
 
         if (null !=snake.get(playerNewPosition)) {
             System.out.println("Oops..swallowed by the snake..");
+            System.out.println("You fell from " + playerNewPosition + " to " + snake.get(playerNewPosition));
             playerNewPosition=snake.get(playerNewPosition);
         }
 
         if (null !=ladder.get(playerNewPosition)) {
-            System.out.println("YAY! climbing the ladder..");
+            System.out.println("YAY! climbing the ladder... from " + playerNewPosition + " to " + ladder.get(playerNewPosition));
             playerNewPosition=ladder.get(playerNewPosition);
         }
 
@@ -63,6 +65,7 @@ public class SnakeAndLadder {
         Scanner scan= new Scanner(System.in);
         String rPressed;
         int diceValue = 0;
+        int count = 0;
         do {
             System.out.println(currentPlayer == -1
                     ? "\n\nFirst player's turn" : "\n\nSecond player's turn");
@@ -70,8 +73,31 @@ public class SnakeAndLadder {
             rPressed=scan.next();
             diceValue=rollDice();
 
+            if(diceValue == 6){
+                count++;
+                if(count==3){
+                    System.out.println("Damn, you got 6 for 3rd time straight.");
+                    if(currentPlayer == -1){
+                        System.out.println("In hurry are you? Take that, you are off where you started ;(");
+                        player1Position -= 12;
+                        System.out.println("Player 1 is back at where he started");
+                        System.out.println("Player 1 position is now : " + player1Position);
+                    }else{
+                        System.out.println("In hurry are you? Take that you are off where you started ;(.");
+                        player2Position -= 12;
+                        System.out.println("Player 2 is back at where it started");
+                        System.out.println("Player 2 position is now : " + player2Position);
+                    }
+
+                    currentPlayer = -currentPlayer;
+                    count = 0;
+                    continue;
+                }
+            }
+
+
             if (currentPlayer==-1) {
-                player1Position=calculatePlayerValue(player1Position, diceValue);
+                player1Position= calculatePlayerPosition(player1Position, diceValue);
                 System.out.println("Player 1 can move " + diceValue + " positions ahead.");
                 System.out.println("First Player Position:"+player1Position);
                 System.out.println("Second Player Position:"+player2Position);
@@ -80,8 +106,9 @@ public class SnakeAndLadder {
                     System.out.println("Congratulations! First player won");
                     return;
                 }
+
             } else {
-                player2Position = calculatePlayerValue(player2Position, diceValue);
+                player2Position = calculatePlayerPosition(player2Position, diceValue);
                 System.out.println("Player 2 can move " + diceValue + " positions ahead.");
                 System.out.println("First Player Position:"+player1Position);
                 System.out.println("Second Player Position:"+player2Position);
@@ -91,7 +118,13 @@ public class SnakeAndLadder {
                     return;
                 }
             }
-            currentPlayer = -currentPlayer;
+
+            if(diceValue == 6){
+                System.out.println("You got 6 on your dice. You can move once again :D");
+            }else {
+                currentPlayer = -currentPlayer;
+                count = 0;
+            }
         } while ("r".equals(rPressed));
     }
 }
